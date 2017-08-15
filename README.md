@@ -22,7 +22,15 @@ dependencies {
 
 [thirdPartyLibrary][2]
 
-关于所需要的so文件，已经放在根目录下的so文件夹下，需要哪些可自行添加，为避免与其它包so产生问题，就没有放到lib里面，需要自己放到主的项目的libs下面
+关于所需要的so文件，已经放在根目录下的so文件夹下，需要哪些可自行添加，为避免与其它包so产生问题，就没有放到lib里面，需要自己放到主的项目的libs下面，不要忘记指定so的位置，如下
+```gradle
+sourceSets{
+    main{
+        jniLibs.srcDirs = ['libs']
+    }
+}
+```
+
 
 关于混淆
 -------
