@@ -2,7 +2,7 @@ package com.daohen.social.wb.library.api;
 
 import com.daohen.social.wb.library.bean.WbUserInfoResponse;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -15,6 +15,6 @@ import retrofit2.http.Query;
 public interface WbService {
 
     @GET("/users/show")
-    Observable<WbUserInfoResponse> getUserInfo(@Query("access_token") String token, @Query("uid") String uid);
+    Single<WbUserInfoResponse> getUserInfo(@Query("access_token") String token, @Query("uid") String uid);
 
 }

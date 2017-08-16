@@ -5,12 +5,11 @@ import com.daohen.social.wb.library.bean.SuccessObj;
 import com.daohen.social.wb.library.bean.WbUserInfoResponse;
 import com.daohen.social.wb.library.callback.LoginAuthListener;
 import com.daohen.thirdparty.library.retrofit.RetrofitFactory;
+import com.daohen.thirdparty.library.rxjava.SingleDefaultObserver;
+import com.daohen.thirdparty.library.rxjava.SingleSchedulerTransformer;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DefaultObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * CREATE BY ALUN
@@ -26,11 +25,10 @@ public class WbApi {
 
     public void getUserInfo(Oauth2AccessToken accessToken, final LoginAuthListener listener){
         wbService.getUserInfo(accessToken.getToken(), accessToken.getUid())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<WbUserInfoResponse>() {
+                .compose(new SingleSchedulerTransformer<WbUserInfoResponse>())
+                .subscribe(new SingleDefaultObserver<WbUserInfoResponse>() {
                     @Override
-                    public void onNext(@NonNull WbUserInfoResponse wbUserInfoResponse) {
+                    public void onSuccess(@NonNull WbUserInfoResponse wbUserInfoResponse) {
                         if (listener != null)
                             listener.onSuccess(new SuccessObj(wbUserInfoResponse));
                     }
@@ -39,11 +37,6 @@ public class WbApi {
                     public void onError(@NonNull Throwable e) {
                         if (listener != null)
                             listener.onFailure();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
                     }
                 });
     }
